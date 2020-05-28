@@ -41,6 +41,7 @@ export default class BackupWalletScreen extends Screen {
     });
   };
   nextButtonOnPress = () => {
+    console.log(this.props)
     if (this.props.mnemonicWords) {
       this.goExportMnemonicScreen(this.props.mnemonicWords);
       return;

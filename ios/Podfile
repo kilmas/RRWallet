@@ -52,6 +52,7 @@ def appPods
   pod 'react-native-fast-image', :path => '../node_modules/react-native-fast-image'
   pod 'SDWebImage/WebP', '4.4.2'
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+  pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
 end
 
 target 'rrwallet-inhouse' do

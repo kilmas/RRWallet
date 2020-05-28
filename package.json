@@ -5,22 +5,30 @@
   "private": true,
   "scripts": {
     "start": "RN_JS_VERSION=$npm_package_bundleversion RN_ENV=DEV node node_modules/react-native/local-cli/cli.js start --reset-cache",
+    "ios": "react-native run-ios",
     "build-ios": "sh ./script/jenkins_build_ios.sh $npm_package_version $npm_package_bundleversion RRWALLET",
     "build-android": "sh ./script/jenkins_build_android.sh $npm_package_version $npm_package_bundleversion RRWALLET",
-    "postinstall": "sh fix_podspec_bug.sh"
+    "postinstall": "sh fix_podspec_bug.sh",
+    "linktest": "react-native link react-native-keychain"
   },
   "dependencies": {
     "base32.js": "0.1.0",
     "bignumber.js": "8.1.1",
-    "buffer": "git+ssh://git@github.com/kufufu9/buffer.git",
+    "bip32": "^2.0.5",
+    "bip39": "^3.0.2",
+    "bitcoinjs-lib": "^5.1.8",
+    "buffer": "git+https://git@github.com/kufufu9/buffer.git",
     "crypto-js": "3.1.9-1",
     "i18n-js": "3.2.2",
+    "install": "^0.13.0",
     "jsc-android": "245459.0.0",
     "jsencrypt": "3.0.0-rc.1",
     "lodash": "4.17.13",
     "mobx": "4.6.0",
     "mobx-react": "5.4.3",
     "moment": "2.24.0",
+    "node-libs-react-native": "^1.2.0",
+    "npm": "^6.14.5",
     "prop-types": "15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.10",
@@ -33,6 +41,7 @@
     "react-native-fs": "2.13.3",
     "react-native-image-picker": "0.27.2",
     "react-native-keyboard-aware-scroll-view": "0.9.1",
+    "react-native-keychain": "^6.0.0",
     "react-native-languages": "3.0.2",
     "react-native-linear-gradient": "2.5.4",
     "react-native-modal": "11.0.1",
@@ -48,7 +57,8 @@
     "react-native-touch-id": "4.3.0",
     "react-native-vector-icons": "6.4.2",
     "react-native-view-shot": "2.6.0",
-    "react-native-webview": "4.1.0"
+    "react-native-webview": "4.1.0",
+    "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",

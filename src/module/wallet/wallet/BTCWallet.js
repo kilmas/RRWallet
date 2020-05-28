@@ -34,6 +34,9 @@ import {
   BTCSegwitP2SHUSDTTransaction,
 } from "./btc/BTCSegwit";
 import { addressType } from "./util/serialize";
+import * as bip32 from 'bip32';
+import * as bip39 from 'bip39';
+import * as bitcoin from 'bitcoinjs-lib';
 
 const RRRNBitcoin = NativeModules.RRRNBitcoin;
 const BITCOIN_SATOSHI = 100000000;
@@ -93,6 +96,7 @@ export default class BTCWallet extends Wallet {
     this.path = this.path || network.env === NETWORK_ENV_TESTNET ? "m/44'/1'/0'/0/0" : "m/44'/0'/0'/0/0";
     this.type = Wallet.WALLET_TYPE_BTC;
     this.coins = [this.BTC, this.USDT];
+    console.log(obj)
     this.extendedPublicKey = obj.extendedPublicKey && new BTCExtendedKey(obj.extendedPublicKey);
     this.addresses = (obj.addresses &&
       obj.addresses.length > 0 &&
@@ -155,8 +159,10 @@ export default class BTCWallet extends Wallet {
     return new Promise(async (resolve, reject) => {
       try {
         let obj = await RRRNBitcoin.importAccount(mnemonic, pwd, name);
+        console.log(obj)
         let act = new BTCWallet({ ...obj, source: WALLET_SOURCE_MW });
         act.extendedPublicKey = await act.exportExtendedPublicKey(pwd);
+        console.log(act)
         await act.generatorAddress(BTC_INPUT_TYPE_P2SH);
         act.source = WALLET_SOURCE_MW;
         act.name = name;
@@ -384,6 +390,7 @@ export default class BTCWallet extends Wallet {
       return [];
     }
     const relativePaths = paths.map(path => path.split(extendedKey.path).join(""));
+    console.log(relativePaths, this.extendedPublicKey)
     const addresses = await RRRNBitcoin.fetchAddresses(this.id, relativePaths, extendedKey.key, type, network.env);
     const bip44Addresses = addresses.map((address, i) => new BIP44Address({ address: address, path: paths[i] }));
 
@@ -420,6 +427,7 @@ export default class BTCWallet extends Wallet {
   };
   @action insertAddresses = async addresses => {
     this.addresses.unshift(...addresses);
+    console.log(this.addresses)
     this.addressesMap = this.addresses.reduce((map, address) => {
       map[address.address] = address;
       return map;
@@ -433,6 +441,13 @@ export default class BTCWallet extends Wallet {
    * @memberof BTCWallet
    */
   @action generatorAddress = async type => {
+    const test = await this.exportMnemonic("ul123456");
+    console.log(test)
+    const seed = bip39.mnemonicToSeedSync(test);
+    const node = bip32.fromSeed(seed);
+    const strng = node.neutered().toBase58();
+    console.log(strng)
+
     const addresses = this.addresses.filter(address => {
       const addType = addressType(address.address);
       return addType === type;
@@ -445,10 +460,18 @@ export default class BTCWallet extends Wallet {
     let address;
     switch (type) {
       case BTC_ADDRESS_TYPE_PKH: {
+        const child1 = node.derivePath(`m/44'/0'/0'/0/${index}`);
+        const test = bitcoin.payments.p2pkh({ pubkey: child1.publicKey, network }).address;
+        console.log(test)
         address = (await this.fetchAddresses([path], type, this.extendedPublicKey, network.env)).pop();
         break;
       }
       case BTC_ADDRESS_TYPE_SH: {
+        const child1 = node.derivePath(`m/44'/0'/0'/0/${index}`);
+        const test = bitcoin.payments.p2sh({
+          redeem: bitcoin.payments.p2wpkh({ pubkey: child1.publicKey }),
+        });
+        console.log(test)
         const relativePath = path.split(this.extendedPublicKey.path).slice(-1);
         const [pubkey] = await this.extendedPublicKey.generatePublicKey(relativePath);
         address = new BIP44Address({
@@ -459,7 +482,7 @@ export default class BTCWallet extends Wallet {
         break;
       }
     }
-
+    console.log(address)
     await this.insertAddresses([address]);
     return this.addresses[0];
   };

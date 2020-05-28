@@ -119,6 +119,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-keychain')
     implementation "org.webkit:android-jsc:r245459"
     compile project(':react-native-prompt-android')
     compile project(':react-native-vector-icons')

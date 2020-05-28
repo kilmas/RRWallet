@@ -141,6 +141,8 @@ PODS:
     - React
   - RNFS (2.13.3):
     - React
+  - RNKeychain (6.0.0):
+    - React
   - RNLanguages (3.0.2):
     - React
   - RNSVG (9.4.0):
@@ -203,6 +205,7 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
+  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNLanguages (from `../node_modules/react-native-languages`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
@@ -217,7 +220,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - CocoaSecurity
     - FLAnimatedImage
@@ -265,6 +268,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNFS:
     :path: "../node_modules/react-native-fs"
+  RNKeychain:
+    :path: "../node_modules/react-native-keychain"
   RNLanguages:
     :path: "../node_modules/react-native-languages"
   RNSVG:
@@ -300,7 +305,7 @@ SPEC CHECKSUMS:
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   ISO8601DateFormatter: 4551b6ce4f83185425f583b0b3feb3c7b59b942c
-  libwebp: 0f01098c6c17175391af621b2f14150f3ca16e16
+  libwebp: 38b601da310fe7c329c638d0c0d10aed006a54fe
   OpenSSL-Universal: 85ef63bf81d0741b03c8719cd29685c37c59518d
   Picker: 37554355aef82a532ea95b71b6eeba66bc86182b
   React: 36d0768f9e93be2473b37e7fa64f92c1d5341eef
@@ -311,6 +316,7 @@ SPEC CHECKSUMS:
   react-native-webview: caa0f5259fa5781ed07d9b03bc5ddbe3c123f5ed
   RNDeviceInfo: 75dac2d7cd6b638b512cc9266ce48a39661fed0e
   RNFS: c9bbde46b0d59619f8e7b735991c60e0f73d22c1
+  RNKeychain: bf2d7e9a0ae7a073c07770dd2aa6d11c67581733
   RNLanguages: 962e562af0d34ab1958d89bcfdb64fafc37c513e
   RNSVG: 9cb6e958c4b6a1f58185ac72a350b148947d6fed
   RNVectorIcons: 2360af3924408c9b3f9064ba0e90d75f79d64705
@@ -325,6 +331,6 @@ SPEC CHECKSUMS:
   UMCSecurityPlugins: 0831a08f3988f3cea9f1d3a7626cd9bee4fef150
   yoga: 684513b14b03201579ba3cee20218c9d1298b0cc
 
-PODFILE CHECKSUM: b0e1e3f7b2ba81e8271d3cab6120238422c889e6
+PODFILE CHECKSUM: a8ba8195d9be09b68b0e19e2da97180e796b28cd
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.2
