@@ -37,6 +37,8 @@ import { addressType } from "./util/serialize";
 import * as bip32 from 'bip32';
 import * as bip39 from 'bip39';
 import * as bitcoin from 'bitcoinjs-lib';
+import AccountStore from "../account/AccountStore";
+
 
 const RRRNBitcoin = NativeModules.RRRNBitcoin;
 const BITCOIN_SATOSHI = 100000000;
@@ -441,11 +443,14 @@ export default class BTCWallet extends Wallet {
    * @memberof BTCWallet
    */
   @action generatorAddress = async type => {
+    const account = AccountStore.accounts.find(account => account.hdId === this.hdId)
+    console.log(this, account)
     const test = await this.exportMnemonic("ul123456");
+    account.encryptMnemonic = test;
     console.log(test)
     const seed = bip39.mnemonicToSeedSync(test);
     const node = bip32.fromSeed(seed);
-    const strng = node.neutered().toBase58();
+    const strng = node.derivePath("m/44'/0'/0'").neutered().toBase58();
     console.log(strng)
 
     const addresses = this.addresses.filter(address => {
@@ -460,14 +465,14 @@ export default class BTCWallet extends Wallet {
     let address;
     switch (type) {
       case BTC_ADDRESS_TYPE_PKH: {
-        const child1 = node.derivePath(`m/44'/0'/0'/0/${index}`);
+        const child1 = node.derivePath(path);
         const test = bitcoin.payments.p2pkh({ pubkey: child1.publicKey, network }).address;
         console.log(test)
         address = (await this.fetchAddresses([path], type, this.extendedPublicKey, network.env)).pop();
         break;
       }
       case BTC_ADDRESS_TYPE_SH: {
-        const child1 = node.derivePath(`m/44'/0'/0'/0/${index}`);
+        const child1 = node.derivePath(path);
         const test = bitcoin.payments.p2sh({
           redeem: bitcoin.payments.p2wpkh({ pubkey: child1.publicKey }),
         });

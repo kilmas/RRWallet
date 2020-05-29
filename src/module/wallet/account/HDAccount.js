@@ -35,6 +35,7 @@ import BSVWallet from "../wallet/BSVWallet";
 
 class HDAccount extends Account {
   hdId;
+  encryptMnemonic;
   @computed get hasCreated() {
     return !!this.wallets.length;
   }
@@ -258,6 +259,10 @@ class HDAccount extends Account {
     if (obj.hasOwnProperty("hasBackup")) {
       this.hasBackup = obj.hasBackup;
     }
+    console.log(this.encryptMnemonic)
+    if (obj.hasOwnProperty("encryptMnemonic")) {
+      this.encryptMnemonic = obj.encryptMnemonic;
+    }
     this.hdId = obj.hdId;
     this.wallets = _.compact([this.BTCWallet, this.ETHWallet, this.ETCWallet, this.BCHWallet, this.BSVWallet]);
 
@@ -358,7 +363,10 @@ class HDAccount extends Account {
     if (!this.wallets.length) {
       throw new Error("请先创建钱包");
     }
-    return await this.wallets[0].exportMnemonic(pwd);
+    const encryptMnemonic = (await this.wallets[0].exportMnemonic(pwd));
+    console.log(encryptMnemonic)
+    this.encryptMnemonic = encryptMnemonic
+    return encryptMnemonic;
   };
 
   /**
@@ -429,6 +437,7 @@ class HDAccount extends Account {
       stashedReceiveCoinID: this.stashedReceiveCoinID,
       stashedTransferCoinID: this.stashedTransferCoinID,
       isExtendedPublicKeyUploaded: this.isExtendedPublicKeyUploaded,
+      encryptMnemonic: this.encryptMnemonic,
     };
   }
 }
